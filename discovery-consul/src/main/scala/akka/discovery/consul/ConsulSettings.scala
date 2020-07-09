@@ -10,15 +10,15 @@ import akka.annotation.ApiMayChange
 
 @ApiMayChange
 final class ConsulSettings(system: ExtendedActorSystem) extends Extension {
-  private val consulConfig = system.settings.config.getConfig("akka.discovery.akka-consul")
+  private val consulConfig =
+    system.settings.config.getConfig("akka.discovery.akka-consul")
 
   val consulHost: String = consulConfig.getString("consul-host")
 
   val consulPort: Int = consulConfig.getInt("consul-port")
 
-  val applicationNameTagPrefix: String = consulConfig.getString("application-name-tag-prefix")
-  val applicationAkkaManagementPortTagPrefix: String =
-    consulConfig.getString("application-akka-management-port-tag-prefix")
+  val managementServiceSuffix: String =
+    consulConfig.getString("management-service-suffix")
 }
 
 @ApiMayChange
@@ -29,5 +29,6 @@ object ConsulSettings extends ExtensionId[ConsulSettings] with ExtensionIdProvid
 
   override def lookup: ConsulSettings.type = ConsulSettings
 
-  override def createExtension(system: ExtendedActorSystem): ConsulSettings = new ConsulSettings(system)
+  override def createExtension(system: ExtendedActorSystem): ConsulSettings =
+    new ConsulSettings(system)
 }
